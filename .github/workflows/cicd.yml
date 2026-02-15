@@ -18,3 +18,22 @@ jobs:
       uses: actions/setup-python@v6.2.0
       with:
         python-version-file: .python-version
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout-Repo
+      uses: actions/checkout@v2
+
+    - name: Install_UV
+      uses: astral-sh/setup-uv@v7
+
+    - name: Steup_Python
+      uses: actions/setup-python@v6.2.0
+      with:
+        python-version-file: .python-version
+
+    - name: Test_Python
+      run: python -m main.py
+      
+      
