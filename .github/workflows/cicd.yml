@@ -35,6 +35,6 @@ jobs:
         python-version-file: .python-version
 
     - name: Test_Python
-      run: python -m main.py
+      run: python -m main
       
       
