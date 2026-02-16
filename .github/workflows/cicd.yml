@@ -1,9 +1,12 @@
 name: Build/Test/Deploy
 on:
-  push:
-    branches:
-      - feature/github_actions
-
+  workflow_call:
+    inputs: 
+      python-version:
+        description: "Python Version"
+        required: true
+        type: string
+        
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,7 +20,7 @@ jobs:
     - name: Setup_Python
       uses: actions/setup-python@v6.2.0
       with:
-        python-version-file: .python-version
+        python-version: ${{ inputs.python-version }}
 
   test:
     runs-on: ubuntu-latest
@@ -32,7 +35,7 @@ jobs:
     - name: Setup_Python
       uses: actions/setup-python@v6.2.0
       with:
-        python-version-file: .python-version
+        python-version: ${{ inputs.python-version }}
 
     - name: Test_Python
       run: python -m main
@@ -61,7 +64,7 @@ jobs:
       - name: Setup_Python
         uses: actions/setup-python@v6.2.0
         with:
-          python-version-file: .python-version
+          python-version: ${{ inputs.python-version }}
 
       - name: Generate_HTML
         run: python main.py --generate-html
