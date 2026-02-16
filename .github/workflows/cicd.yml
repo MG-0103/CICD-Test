@@ -14,7 +14,7 @@ jobs:
     - name: Install_UV
       uses: astral-sh/setup-uv@v7
 
-    - name: Steup_Python
+    - name: Setup_Python
       uses: actions/setup-python@v6.2.0
       with:
         python-version-file: .python-version
@@ -29,7 +29,7 @@ jobs:
     - name: Install_UV
       uses: astral-sh/setup-uv@v7
 
-    - name: Steup_Python
+    - name: Setup_Python
       uses: actions/setup-python@v6.2.0
       with:
         python-version-file: .python-version
@@ -37,4 +37,43 @@ jobs:
     - name: Test_Python
       run: python -m main
       
-      
+  deploy:
+    needs: test
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    environment:
+      name: Development
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout_repo
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install_UV
+        uses: astral-sh/setup-uv@v7
+
+      - name: Setup_Python
+        uses: actions/setup-python@v6.2.0
+        with:
+          python-version-file: .python-version
+
+      - name: Generate_HTML
+        run: python main.py --generate-html
+
+      - name: Configure_github_pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload_artifacts
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: "./build"
+
+      - name: deploy
+        id: deployment
+        uses: actions/deploy-pages@v1
